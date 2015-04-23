@@ -12,10 +12,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 
+import java.util.Calendar;
+
 public class DatabaseConnector
 {
     // database name
     private static final String DATABASE_NAME = "BradleyDB";
+
+    // identify current date
+    Calendar c = Calendar.getInstance();
+    int date = c.get(Calendar.DATE);
 
     private SQLiteDatabase database; // for interacting with the database
     private DatabaseOpenHelper databaseOpenHelper; // creates the database
@@ -43,12 +49,19 @@ public class DatabaseConnector
     }
 
     // inserts data based on food entered
-    public long insertFoodEntry(String title, String director, String year)
+    public long insertDailyFood(String milk, String eggs, String protein, String greenVeg, String veg, String grains, String vitC, String fats, String fruits, String water)
     {
         ContentValues newFood = new ContentValues();
-        newFood.put("title", title);
-        newFood.put("director", director);
-        newFood.put("year", year);
+        newFood.put("milk", milk);
+        newFood.put("eggs", eggs);
+        newFood.put("protein", protein);
+        newFood.put("green vegetables", greenVeg);
+        newFood.put("vegetables", veg);
+        newFood.put("grains", grains);
+        newFood.put("vitamin c", vitC);
+        newFood.put("fats", fats);
+        newFood.put("fruits", fruits);
+        newFood.put("water", water);
 
         open(); // open the database
         long rowID = database.insert("daily", null, newFood);
@@ -57,13 +70,19 @@ public class DatabaseConnector
     }
 
     // updates an existing food entry
-    public void updateFoodEntry(long id, String title, String director,
-                              String year)
+    public void updateFoodEntry(long id, String milk, String eggs, String protein, String greenVeg, String veg, String grains, String vitC, String fats, String fruits, String water)
     {
         ContentValues editFood = new ContentValues();
-        editFood.put("title", title);
-        editFood.put("director", director);
-        editFood.put("year", year);
+        editFood.put("milk", milk);
+        editFood.put("eggs", eggs);
+        editFood.put("protein", protein);
+        editFood.put("green vegetables", greenVeg);
+        editFood.put("vegetables", veg);
+        editFood.put("grains", grains);
+        editFood.put("vitamin c", vitC);
+        editFood.put("fats", fats);
+        editFood.put("fruits", fruits);
+        editFood.put("water", water);
 
         open(); // open the database
         database.update("daily", editFood, "_id=" + id, null);
@@ -101,14 +120,15 @@ public class DatabaseConnector
             super(context, title, factory, version);
         }
 
-        // creates the contacts table when the database is created
+        // creates the daily table when the database is created
         @Override
         public void onCreate(SQLiteDatabase db)
         {
             // query to create a new table named contacts
             String createQuery = "CREATE TABLE daily" +
                     "(_id integer primary key autoincrement," +
-                    "title TEXT, director TEXT, year TEXT);";
+                    "milk TEXT, eggs TEXT, protein TEXT, green vegetables TEXT, vegetables TEXT, " +
+                    "grains TEXT, vitamin c TEXT, fats TEXT, fruits TEXT, water TEXT);";
 
             db.execSQL(createQuery); // execute query to create the database
         }
@@ -118,5 +138,5 @@ public class DatabaseConnector
                               int newVersion)
         {
         }
-    } // end class DatabaseOpenHelper
+    }
 }
